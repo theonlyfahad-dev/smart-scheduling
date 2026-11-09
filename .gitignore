@@ -1,0 +1,49 @@
+# Dependencies
+node_modules/
+.pnpm-store/
+
+# Environment and Secrets
+.env
+.env.local
+.env.*.local
+*.pem
+*.key
+credentials.json
+
+# Build Outputs
+dist/
+build/
+out/
+.next/
+*.tsbuildinfo
+
+# Local Databases and Storage
+*.db
+*.db-journal
+*.sqlite
+*.sqlite3
+*.pglite
+pgdata/
+data/
+
+# Temporary and Upload Files
+tmp/
+temp/
+uploads/
+*.log
+
+# Caches and Diagnostics
+.cache/
+.eslintcache
+.turbo/
+
+# OS and IDE Files
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.swp

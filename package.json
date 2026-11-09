@@ -1,0 +1,22 @@
+{
+  "name": "smart-campus",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Smart Campus (SmartTT) - College Timetable & Scheduling Platform",
+  "scripts": {
+    "dev:backend": "npm --prefix backend run dev",
+    "dev:frontend": "npm --prefix frontend run dev",
+    "build:backend": "npm --prefix backend run build",
+    "build:frontend": "npm --prefix frontend run build",
+    "build": "npm run build:backend && npm run build:frontend",
+    "test": "npm --prefix backend test",
+    "check:types": "npm --prefix backend run check:types && npm --prefix frontend run check:types"
+  },
+  "keywords": [
+    "smart-campus",
+    "timetable",
+    "college-schedule"
+  ],
+  "author": "",
+  "license": "ISC"
+}
