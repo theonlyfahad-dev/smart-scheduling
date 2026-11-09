@@ -12,7 +12,7 @@ async function testHealth() {
       const res = await fetch(`http://127.0.0.1:${port}/api/v1/health`);
       assert.strictEqual(res.status, 200, 'HTTP status must be 200');
 
-      const data = await res.json() as {
+      const data = (await res.json()) as {
         status: string;
         service: string;
         version: string;
@@ -21,16 +21,18 @@ async function testHealth() {
 
       assert.strictEqual(data.status, 'ok', 'Service status must be ok');
       assert.strictEqual(data.service, 'smart-campus-backend', 'Service name must match');
-      assert.strictEqual(data.database.status, 'not_configured', 'Step 1 database status must be not_configured');
+      assert.strictEqual(data.database.status, 'connected', 'Database status must be connected after connect()');
       assert.strictEqual(data.database.adapter, 'pglite', 'Database adapter must match configured adapter');
 
-      console.log('✓ Health check test passed: HTTP 200, valid payload, database correctly reported as not_configured.');
-      server.close(() => {
+      console.log('✓ Health check test passed: HTTP 200, valid payload, database correctly reported as connected.');
+      server.close(async () => {
+        await dbAdapter.disconnect();
         process.exit(0);
       });
     } catch (err) {
       console.error('✗ Health check test assertion failed:', err);
-      server.close(() => {
+      server.close(async () => {
+        await dbAdapter.disconnect();
         process.exit(1);
       });
     }
