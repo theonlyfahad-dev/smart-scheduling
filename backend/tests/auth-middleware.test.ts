@@ -58,6 +58,7 @@ function createMockReqRes(options: {
   let ended = false;
   const setCookies: Array<{ name: string; val: string; options: any }> = [];
   const clearedCookies: Array<{ name: string; options: any }> = [];
+  const responseHeaders: Record<string, string> = {};
 
   const normalizedHeaders: Record<string, string> = {};
   if (options.headers) {
@@ -85,6 +86,7 @@ function createMockReqRes(options: {
           body: responseBody,
           setCookies,
           clearedCookies,
+          headers: responseHeaders,
         });
       }
     }
@@ -107,6 +109,10 @@ function createMockReqRes(options: {
     },
     clearCookie(name: string, opts: any) {
       clearedCookies.push({ name, options: opts });
+      return res;
+    },
+    setHeader(name: string, val: string) {
+      responseHeaders[name.toLowerCase()] = val;
       return res;
     },
   };
@@ -149,6 +155,7 @@ function createMockDispatcher(router: any) {
       body: any;
       setCookies: Array<{ name: string; val: string; options: any }>;
       clearedCookies: Array<{ name: string; options: any }>;
+      headers?: Record<string, string>;
     }>((resolve, reject) => {
       let resolved = false;
       const onEnd = (result: any) => {
@@ -322,7 +329,13 @@ async function runAuthMiddlewareTestSuite(): Promise<void> {
     assert.strictEqual(meValid.body.user.username, 'SecurityAdmin');
     assert.strictEqual(meValid.body.user.role, 'ADMIN');
     assert.strictEqual(meValid.body.user.password_hash, undefined);
-    console.log('✓ 7. GET /api/v1/auth/me returns authenticated user details.');
+    assert.strictEqual(meValid.body.csrfToken, csrfSecret, 'Must return session csrfToken for refresh re-hydration');
+    assert.strictEqual(
+      meValid.headers?.['cache-control'],
+      'no-store, no-cache, must-revalidate, private',
+      'Must set strict no-cache headers'
+    );
+    console.log('✓ 7. GET /api/v1/auth/me returns authenticated user details and CSRF token with no-cache headers.');
 
     // 8. /me without authentication
     const meInvalid = await dispatch({

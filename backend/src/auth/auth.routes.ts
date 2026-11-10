@@ -126,6 +126,7 @@ export function createAuthRouter(customDb?: any): Router {
   router.get('/me', authMiddleware, (_req: Request, res: Response) => {
     const user = res.locals.user;
 
+    res.setHeader('Cache-Control', 'no-store, no-cache, must-revalidate, private');
     return res.status(200).json({
       user: {
         id: user.id,
@@ -133,6 +134,7 @@ export function createAuthRouter(customDb?: any): Router {
         role: user.role,
         faculty_id: user.faculty_id,
       },
+      csrfToken: user.csrf_secret,
     });
   });
 

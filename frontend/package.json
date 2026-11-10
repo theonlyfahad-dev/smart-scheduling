@@ -7,6 +7,7 @@
     "dev": "vite",
     "build": "tsc && vite build",
     "preview": "vite preview",
+    "test": "node ../backend/node_modules/tsx/dist/cli.mjs tests/frontend-integration.test.ts && node ../backend/node_modules/tsx/dist/cli.mjs tests/browser-ui-verification.test.ts",
     "check:types": "tsc --noEmit"
   },
   "dependencies": {
