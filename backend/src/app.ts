@@ -3,9 +3,11 @@ import cors from 'cors';
 import cookieParser from 'cookie-parser';
 import { env } from './config/env.js';
 import { healthRouter } from './routes/health.routes.js';
-import { authRouter } from './auth/auth.routes.js';
+import { authRouter, createAuthRouter } from './auth/auth.routes.js';
+import { createAdminMasterDataRouter } from './routes/admin/master-data.routes.js';
+import type { DatabaseExecutor } from './db/client.js';
 
-export function createApp(): Express {
+export function createApp(customDb?: DatabaseExecutor): Express {
   const app = express();
 
   // Basic security and parsing middleware
@@ -18,7 +20,8 @@ export function createApp(): Express {
 
   // API v1 routes
   app.use('/api/v1', healthRouter);
-  app.use('/api/v1/auth', authRouter);
+  app.use('/api/v1/auth', customDb ? createAuthRouter(customDb) : authRouter);
+  app.use('/api/v1/admin', createAdminMasterDataRouter(customDb));
 
   // Root fallback
   app.get('/', (_req: Request, res: Response) => {

@@ -17,6 +17,7 @@
     "test:auth-setup": "tsx tests/auth-setup.test.ts",
     "test:auth-service": "tsx tests/auth-service.test.ts",
     "test:auth-middleware": "tsx tests/auth-middleware.test.ts",
+    "test:admin-api": "tsx tests/admin-master-data.test.ts",
     "setup:admin": "tsx src/scripts/setup-admin.ts",
     "db:generate": "drizzle-kit generate",
     "db:migrate": "tsx src/db/migrate.ts",
